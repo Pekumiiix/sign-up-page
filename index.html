@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    font-family: cursive;
+}
+
+body {
+    background: lightblue;
+    display: flex;
+    justify-content: center;
+}
+
+form {
+    height: 80vh;
+    width: 33vw;
+    background: white;
+    align-self: center;
+    border-radius: 8px;
+    margin-top: 4.5rem;
+    justify-content: center;
+    position: relative;
+}
+
+form h1 {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.input-control {
+    display: block;
+    margin-left: 2rem;
+    margin-top: 1rem;
+}
+
+.input-control input {
+    border: none;
+    border-bottom: 1px solid black;
+    width: 88%;
+    outline: none;
+}
+
+.input-control.success input {
+    border-bottom: 1px solid lightgreen;
+}
+
+.input-control.error input {
+    border-bottom: 1px solid red;
+}
+
+.input-control .error {
+    font-size: 9px;
+    color: red;
+    height: 13px;
+}
+
+.space {
+    margin-top: 2rem;
+}
+
+button {
+    border: none;
+    width: 83%;
+    margin-left: 2rem;
+    margin-top: 2rem;
+    height: 2rem;
+    border-radius: 8px;
+    background: linear-gradient(90deg, red, lightblue);
+    font-weight: bold;
+}
+
+
+@media screen and (max-width: 600px)
+{
+    form {
+        width: 90%;
+    }
+}
+    </style>
+    <title>SignUp</title>
+</head>
+<body>
+    <form id="form">
+        <h1>Sign Up</h1>
+        <div class="input-control">
+            <p>Username</p>
+            <input id="username" type="text" name="username">
+            <div class="error"></div>
+        </div>
+        <div class="input-control space">
+            <p>E-mail</p>
+            <input type="text" id="email" name="email">
+            <div class="error"></div>
+        </div>
+        <div class="input-control space">
+            <p>Password</p>
+            <input type="password" id="password" name="password">
+            <div class="error"></div>
+        </div>
+        <div class="input-control space">
+            <p>Confirm Password</p>
+            <input type="password" id="password2" name="password">
+            <div class="error"></div>
+        </div>  
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script>
+    const form = document.getElementById('form');
+const username = document.getElementById('username');
+const email = document.getElementById('email');
+const password = document.getElementById('password')
+const password2 = document.getElementById('password2')
+
+form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    validateInputs();
+});
+
+const setError = (element, message) => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = message;
+    inputControl.classList.add('error');
+    inputControl.classList.remove('success');
+}
+
+const setSuccess = element => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = '';
+    inputControl.classList.add('success');
+    inputControl.classList.remove('error');
+};
+
+const isValidEmail = email => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+const validateInputs = () => {
+    const usernameValue = username.value.trim();
+    const emailValue = email.value.trim();
+    const passwordValue = password.value.trim();
+    const password2Value = password2.value.trim();
+
+    if(usernameValue === '') {
+        setError(username, 'Username is required');
+    } else {
+        setSuccess(username);
+    }
+
+    if(emailValue === '') {
+        setError(email, 'Email is required');
+    } else if (!isValidEmail(emailValue)) {
+        setError (email, 'Provide a valid Email adddress');
+    } else {
+        setSuccess(email);
+    }
+
+    if(passwordValue === '') {
+        setError(password, 'Password is required');
+    } else if (passwordValue.length < 8) {
+        setError(password, 'Password must be atleast 8 characters');
+    } else {
+        setSuccess(password);
+    }
+
+    if(password2Value === '') {
+        setError(password2, 'Please confirm your password');
+    } else if (password2Value !== passwordValue) {
+        setError(password2, 'Password does not match');
+    } else {
+        setSuccess(password2);
+    }
+
+};
+</script>
+</html>
